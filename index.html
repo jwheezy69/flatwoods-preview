@@ -223,6 +223,23 @@ footer img{height:64px}
 .lightbox[hidden]{display:none}
 .lightbox img{max-width:100%;max-height:88vh;object-fit:contain}
 .lightbox span{color:#ccc;font-size:13px;margin-top:10px}
+
+.sms{margin-top:44px;border-top:1px solid #3A342E;padding-top:28px;display:grid;gap:14px}
+.sms h3{color:#fff;font-size:26px}.sms-head p{margin:4px 0 0;color:#B8AB96}
+.sms-fields{display:grid;grid-template-columns:1fr 1.3fr;gap:10px;align-items:end;max-width:640px}
+.sms label span{display:block;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#B8AB96;margin-bottom:5px}
+.sms input[type=text],.sms input[type=tel]{width:100%;font:inherit;font-size:17px;padding:11px 12px;border:2px solid #5B5047;background:#2A2420;color:#fff;border-radius:0}
+.sms input:focus{outline:2px solid #E39A63;outline-offset:0}
+.sms .btn{border:0;cursor:pointer;padding:14px 22px}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#B8AB96;line-height:1.45;max-width:760px}
+.consent input{margin-top:3px;width:18px;height:18px;flex:none;accent-color:var(--ember)}
+.consent a{color:#E9D9C2}
+.sms .consent span{display:inline;font-family:"Source Sans 3",sans-serif;text-transform:none;letter-spacing:normal;font-size:13px;margin:0;color:#B8AB96}
+.sms-msg{margin:0;color:#F0C677;font-weight:600;min-height:1em}
+@media (max-width:860px){.sms-fields{grid-template-columns:1fr}.sms .btn{width:100%}}
+
+.specials .wrap.smswrap{display:block}
+.sms{grid-template-columns:1fr}
 </style></head>
 <body>
 <div class="preview">Website preview for Flatwoods Cafe. Not live.</div>
@@ -282,7 +299,18 @@ footer img{height:64px}
   </ul>
   <p class="sp-note">Coconut water available.</p>
  </div>
-</div></section>
+</div>
+<div class="wrap smswrap"><form class="sms" id="smsform" novalidate>
+ <div class="sms-head"><h3>Get the specials by text</h3><p>The day's board, sent once a day around 11. Reply STOP anytime.</p></div>
+ <div class="sms-fields">
+  <label><span>First name</span><input type="text" name="name" autocomplete="given-name"></label>
+  <label><span>Mobile number</span><input type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="(850) 555-0123" required></label>
+ </div>
+ <label class="consent"><input type="checkbox" name="consent" required><span>Yes, text me Flatwoods Cafe specials and offers at this number. Up to 1 message a day. Consent is not required to buy anything. Message and data rates may apply. Reply STOP to cancel, HELP for help. See our <a href="#visit">Privacy Policy</a> and <a href="#visit">SMS Terms</a>.</span></label>
+ <div><button class="btn solid" type="submit">Sign me up</button></div>
+ <p class="sms-msg" id="smsmsg" role="status"></p>
+</form></div>
+</section>
 
 <section class="block" id="menu"><div class="wrap">
  <div class="menu-head"><h2>Menu</h2><p>Prices before tax. Pay cash to skip the 3% card fee.</p></div>
@@ -378,6 +406,11 @@ window.addEventListener('scroll',function(){document.querySelector('.mobile-bar'
 var bl=document.getElementById('boardlink'),lb=document.getElementById('lightbox');
 bl.addEventListener('click',function(ev){ev.preventDefault();document.getElementById('lbimg').src=bl.querySelector('img').src;lb.hidden=false});
 lb.addEventListener('click',function(){lb.hidden=true});
+document.getElementById('smsform').addEventListener('submit',function(ev){ev.preventDefault();var f=ev.target,m=document.getElementById('smsmsg'),d=f.phone.value.replace(/\D/g,'');
+ if(d.length===11&&d[0]==='1')d=d.slice(1);
+ if(d.length!==10){m.textContent='Enter a 10-digit mobile number.';return}
+ if(!f.consent.checked){m.textContent='Check the box to agree to texts.';return}
+ m.textContent='Preview only: sign-ups start when the site goes live. On the live site, '+(f.name.value||'you')+' would get a text to confirm.';f.reset()});
 var h=location.hash.replace('#m-','');show(document.getElementById('m-'+h)?h:'pizza');
 })();
 </script>
