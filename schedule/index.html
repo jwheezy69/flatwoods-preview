@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flatwoods Schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@700;800&family=Oswald:wght@500;600&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F3EADB;--paper2:#EADDC7;--card:#FBF6EE;--ink:#2B2118;--bark:#5A3A1F;--muted:#6E6050;--pine:#2F5732;--pine2:#E3EBDD;--ember:#C4521C;--ember2:#F7E2D5;--gold:#E8B04A;--rule:#D6C6AB;--board:#1E1B18}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;font-size:16px;line-height:1.4;-webkit-font-smoothing:antialiased}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+h2,h3{font-family:Alegreya,Georgia,serif;font-weight:800;margin:0;line-height:1.1}
+h2{font-size:26px}h3{font-size:20px}
+.label{font-family:Oswald,"Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:600}
+.muted{color:var(--muted)}
+header.top{background:var(--board);color:var(--paper);padding:14px 20px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+header.top h1{font-family:Alegreya,Georgia,serif;font-weight:800;font-size:24px;margin:0;line-height:1}
+header.top .label{color:#E39A63}
+header.top .mock{margin-left:auto;color:#B8AB96}
+nav.tabs{display:flex;background:var(--paper2);border-bottom:2px solid var(--ink);overflow-x:auto}
+nav.tabs button{background:none;border:0;border-right:1px solid var(--rule);padding:14px 18px;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:14px;font-weight:600;color:var(--muted);white-space:nowrap;display:flex;align-items:center;gap:8px}
+nav.tabs button[aria-selected=true]{background:var(--paper);color:var(--ink);box-shadow:inset 0 -4px 0 var(--ember)}
+.badge{background:var(--ember);color:#fff;font-size:11px;min-width:20px;height:20px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;padding:0 6px;letter-spacing:0}
+.badge:empty{display:none}
+main{max-width:1240px;margin:0 auto;padding:22px 20px 60px}
+.view{display:none}.view.on{display:block}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:14px;font-weight:600;padding:11px 16px;border:2px solid var(--ink);border-radius:2px;background:transparent;text-decoration:none;color:var(--ink)}
+.btn.primary{background:var(--ember);border-color:var(--ember);color:#fff}
+.btn.pine{background:var(--pine);border-color:var(--pine);color:#fff}
+.btn.done{background:transparent;border-color:var(--pine);color:var(--pine)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.sm{padding:6px 10px;font-size:12px;border-width:1.5px}
+.btn.block{width:100%}
+
+/* owner week view */
+.bar{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.bar .actions{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap}
+.chip{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:12px;font-weight:600;padding:4px 9px;border:1.5px solid var(--muted);color:var(--muted);border-radius:2px;margin-bottom:4px}
+.chip.pub{background:var(--pine);border-color:var(--pine);color:#fff}
+.hint{margin:0 0 16px;color:var(--muted);max-width:800px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:20px;align-items:start}
+.gridwrap{overflow-x:auto;background:var(--card);border:1px solid var(--rule);border-radius:2px}
+table.grid{border-collapse:separate;border-spacing:4px;width:100%;min-width:840px}
+.grid thead th{font-weight:400;text-align:center;padding:8px 2px 6px;vertical-align:bottom}
+.grid .dn{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:14px;font-weight:600}
+.grid .dd{font-family:Alegreya,serif;font-weight:800;font-size:20px}
+.grid thead small{display:block;font-size:12px;color:var(--muted)}
+.grid th.who{text-align:left;padding:6px 10px 6px 8px;position:sticky;left:0;background:var(--card);z-index:2;min-width:136px;font-weight:400}
+.grid th.who b{display:block;font-size:16px}
+.grid th.who small{display:block;font-size:12px;color:var(--muted)}
+.grid td{padding:0;min-width:84px}
+.grid td.hrs,.grid th.hrs{text-align:center;font-family:Oswald,sans-serif;font-size:15px;min-width:52px;color:var(--muted)}
+.grid tfoot th,.grid tfoot td{text-align:center;font-family:Oswald,sans-serif;font-size:13px;color:var(--muted);padding:6px 0 8px;border-top:1px solid var(--rule)}
+.grid tfoot th.who{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:12px}
+.cf{display:inline-block;margin-top:3px;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:11px;padding:1px 5px;border-radius:2px}
+.cf.yes{background:var(--pine2);color:var(--pine)}
+.cf.no{background:#EFE6D8;color:var(--muted)}
+a.mini{display:table;margin-top:5px;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:11px;font-weight:600;color:var(--ember);text-decoration:none;border-bottom:1.5px solid currentColor;padding-bottom:1px}
+a.mini.sent{color:var(--muted)}
+.cell{width:100%;min-height:54px;border:0;border-radius:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-family:Oswald,sans-serif;font-size:16px;letter-spacing:.04em;position:relative;padding:4px}
+.cell small{font-family:"Source Sans 3",sans-serif;font-size:11px;letter-spacing:0;line-height:1.1}
+.cell.shift{background:var(--pine);color:#fff}
+.cell.lock{background:var(--bark);color:#fff;cursor:default}
+.cell.off{background:repeating-linear-gradient(135deg,#E3D7C3 0 6px,#ECE3D3 6px 12px);color:var(--muted);font-family:"Source Sans 3",sans-serif;font-size:12px;letter-spacing:0}
+.cell.add{background:transparent;border:1.5px dashed var(--rule);color:var(--muted);font-size:18px}
+.cell.add:hover,.cell.add:focus-visible{border-color:var(--pine);color:var(--pine);background:var(--pine2)}
+.cell.conflict{background:var(--ember2);color:var(--ember);box-shadow:inset 0 0 0 2px var(--ember)}
+.cell.changed::after{content:"";position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 1.5px #fff}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:12px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:18px;height:14px;border-radius:2px;display:inline-block}
+.sw.s{background:var(--pine)}.sw.l{background:var(--bark)}
+.sw.o{background:repeating-linear-gradient(135deg,#D9CCB5 0 4px,#ECE3D3 4px 8px)}
+.sw.c{background:var(--ember2);box-shadow:inset 0 0 0 2px var(--ember)}
+.sw.a{border:1.5px dashed var(--rule)}
+.sw.g{width:10px;height:10px;border-radius:50%;background:var(--gold)}
+aside.requests{background:var(--card);border:1px solid var(--rule);border-radius:2px;padding:16px}
+aside.requests h3{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+aside.requests .sub{font-size:13px;color:var(--muted);margin:0 0 12px}
+.req{border-top:1px solid var(--rule);padding:12px 0}
+.req small{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+.req-act{display:flex;gap:8px;margin-top:8px}
+.req .done{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:12px;margin-top:8px}
+.req .done.ok{color:var(--pine)}.req .done.no{color:var(--muted)}
+.req .warn{font-size:13px;color:var(--ember);margin-top:4px}
+.empty{font-size:14px;color:var(--muted);border-top:1px solid var(--rule);padding-top:12px;margin:0}
+
+/* sheets */
+.overlay{position:fixed;inset:0;background:rgba(30,27,24,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.sheet{background:var(--paper);width:100%;max-width:460px;border-radius:3px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.3);max-height:calc(100vh - 32px);overflow:auto}
+.sheet p{margin:6px 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.pchip{font-family:Oswald,sans-serif;font-size:17px;letter-spacing:.04em;padding:10px 14px;min-width:72px;border:2px solid var(--pine);background:#fff;color:var(--pine);border-radius:2px}
+.pchip.sel{background:var(--pine);color:#fff}
+.pchip:disabled{border-color:var(--rule);color:#B9AC98;background:transparent;cursor:not-allowed}
+.give{margin-top:16px;padding-top:12px;border-top:1px solid var(--rule)}
+.give .chips button{font-size:15px;padding:8px 12px;border:1.5px solid var(--ink);background:transparent;border-radius:2px}
+.sheet-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+.publist{list-style:none;margin:0 0 6px;padding:0}
+.publist li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--rule);font-size:15px}
+.publist li div span{display:block;color:var(--muted);font-size:14px}
+.publist .btn{flex:none;min-width:118px}
+.alert{background:var(--ember2);color:var(--ember);padding:10px 12px;font-size:14px;border-radius:2px;margin:10px 0 0}
+
+/* phone views */
+.two{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:36px;align-items:start;max-width:980px;margin:0 auto}
+.two.three{grid-template-columns:380px minmax(0,1fr);max-width:1000px}
+.explain p{max-width:460px}
+.explain .label{color:var(--ember)}
+.explain h2{margin:6px 0 10px}
+.viewas{display:inline-flex;align-items:center;gap:10px;margin-top:8px;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:13px;font-weight:600}
+.viewas select{font-family:"Source Sans 3",sans-serif;text-transform:none;letter-spacing:0;font-size:16px;padding:8px 10px;border:2px solid var(--ink);border-radius:2px;background:#fff}
+.phone{width:360px;max-width:100%;margin:0 auto;border:12px solid #15120F;border-radius:42px;background:#fff;box-shadow:0 24px 60px rgba(43,33,24,.28);overflow:hidden;height:740px;display:flex;flex-direction:column}
+.screen{flex:1;overflow-y:auto;background:var(--paper)}
+.app-h{background:var(--board);color:var(--paper);padding:16px 18px 14px}
+.app-h .label{color:#E39A63}
+.app-h h3{font-size:24px;margin-top:2px}
+.app-b{padding:16px 16px 24px}
+.app-b h4{font-family:Alegreya,serif;font-weight:800;font-size:19px;margin:4px 0 2px}
+.app-b .sm{font-size:14px;color:var(--muted);margin:0 0 12px}
+.dayrow{padding:10px 0;border-top:1px solid var(--rule)}
+.dayrow .dl{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.dayrow .dl b{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:14px}
+.dayrow .dl small{color:var(--muted);font-size:12px}
+.seg{display:flex;border:1.5px solid var(--ink);border-radius:2px;overflow:hidden}
+.seg button{flex:1;border:0;border-right:1px solid var(--rule);background:#fff;padding:10px 2px;font-size:13px;font-weight:600}
+.seg button:last-child{border-right:0}
+.seg button.sel{background:var(--pine);color:#fff}
+.seg button.sel.offsel{background:var(--muted)}
+.card2{background:#fff;border:1px solid var(--rule);border-radius:2px;padding:14px;margin-top:18px}
+.card2:first-child{margin-top:0}
+.card2 label{display:block;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:12px;font-weight:600;color:var(--muted);margin:10px 0 5px}
+.card2 select,.card2 input{width:100%;padding:10px;border:1.5px solid var(--ink);border-radius:2px;background:#fff;font-size:16px}
+.myshifts{list-style:none;padding:0;margin:8px 0 12px}
+.myshifts li{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--rule);font-size:15px}
+.myshifts li b{font-family:Oswald,sans-serif;letter-spacing:.04em;font-weight:500}
+.okline{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:13px;color:var(--pine)}
+.myreq{font-size:14px;padding:6px 0;border-top:1px solid var(--rule);display:flex;justify-content:space-between;gap:10px}
+.myreq b{font-weight:600}
+.sms-h{background:#F4F4F6;border-bottom:1px solid #DDD;padding:14px 16px 10px;text-align:center}
+.sms-h .av{width:44px;height:44px;border-radius:50%;background:var(--bark);color:#fff;font-family:Alegreya,serif;font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 4px}
+.sms-h b{display:block;font-size:14px}.sms-h small{color:#888;font-size:12px}
+.thread{padding:14px 12px 20px;background:#fff;min-height:calc(100% - 96px);display:flex;flex-direction:column;gap:6px}
+.bub{max-width:82%;padding:9px 13px;border-radius:18px;font-size:15px;line-height:1.35;white-space:pre-line;font-family:-apple-system,"Segoe UI",system-ui,sans-serif;overflow-wrap:anywhere;background:#E9E9EB;color:#111;align-self:flex-start;border-bottom-left-radius:5px}
+.bub a{color:#1F5FD0}
+.ts{align-self:center;font-size:11px;color:#999;margin:8px 0 2px;font-family:-apple-system,"Segoe UI",system-ui,sans-serif}
+.note{font-size:13px;color:var(--muted);text-align:center;padding:4px 18px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:var(--board);color:var(--paper);padding:12px 18px;border-radius:2px;font-size:15px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:calc(100vw - 32px);box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.solo-note{display:none}
+
+/* what an employee sees after tapping their link */
+body.solo header.top,body.solo nav.tabs,body.solo #v-week,body.solo #v-sms,body.solo #v-avail .explain{display:none}
+body.solo #v-avail{display:block}
+body.solo main{padding:0}
+body.solo .two{display:block;max-width:520px}
+body.solo .phone{border:0;border-radius:0;box-shadow:none;height:auto;width:auto;max-width:none;margin:0 auto}
+body.solo .screen{overflow:visible}
+body.solo .solo-note{display:block;text-align:center;padding:18px 16px 28px;font-size:13px;color:var(--muted)}
+body.solo .solo-note a{color:var(--ember)}
+
+@media (max-width:980px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  aside.requests{order:-1}
+  .two,.two.three{grid-template-columns:minmax(0,1fr);gap:22px}
+}
+@media (max-width:600px){
+  main{padding:16px 16px 60px}
+  header.top{padding:12px 16px}
+  header.top .mock{margin-left:0;width:100%}
+  .bar .actions{margin-left:0;width:100%}
+  .bar .actions .btn{flex:1}
+  h2{font-size:22px}
+}
+@media (max-width:420px){
+  .phone{border-width:0;border-radius:0;height:auto;box-shadow:none;width:auto;margin:0 -16px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .screen{overflow:visible}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Flatwoods Cafe</h1><span class="label">Staff schedule</span>
+  <span class="label mock">Mockup with sample staff and shifts</span>
+</header>
+<nav class="tabs" role="tablist">
+  <button role="tab" aria-selected="true" data-v="week">Owner: build the week <span class="badge" id="reqBadge"></span></button>
+  <button role="tab" aria-selected="false" data-v="avail">Employee: their page</button>
+  <button role="tab" aria-selected="false" data-v="sms">The text they get</button>
+</nav>
+<main>
+  <section class="view on" id="v-week">
+    <div class="bar">
+      <div><div class="label muted">Week of</div><h2>Mon Oct 20 to Sun Oct 26</h2></div>
+      <span class="chip" id="status">Draft</span>
+      <div class="actions">
+        <button class="btn" id="copyBtn">Copy last week</button>
+        <button class="btn primary" id="pubBtn">Publish</button>
+      </div>
+    </div>
+    <p class="hint" id="hint">Start with <b>Copy last week</b>. Everyone's usual shifts fill in around your set schedule. Gray cells are times people marked they can't work. <b>Text link</b> under a name texts that person their page from your own phone, once.</p>
+    <div class="layout">
+      <div>
+        <div class="gridwrap"><table class="grid" id="grid"></table></div>
+        <div class="legend">
+          <span><i class="sw l"></i>Your set schedule</span>
+          <span><i class="sw s"></i>Shift</span>
+          <span><i class="sw a"></i>Open, tap to add</span>
+          <span><i class="sw o"></i>Can't work or day off</span>
+          <span><i class="sw c"></i>Clashes with a day off</span>
+          <span><i class="sw g"></i>Changed since you published</span>
+        </div>
+      </div>
+      <aside class="requests">
+        <h3>Requests <span class="badge" id="reqCount"></span></h3>
+        <p class="sub">Days off employees asked for on their page.</p>
+        <div id="reqList"></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="view" id="v-avail">
+    <div class="two">
+      <div class="explain">
+        <div class="label">What an employee sees</div>
+        <h2>One link, texted once from her phone</h2>
+        <p>Each employee's link opens this page. No app, no password, no texting service. The days they mark as can't work turn gray on her schedule, day-off requests land in her Requests list, and Got it tells her they saw the week.</p>
+        <p class="muted">Try it: mark Saturday as can't work for Braxton, save, then go back to the owner's schedule.</p>
+        <label class="viewas">Viewing as <select id="who"></select></label>
+      </div>
+      <div class="phone"><div class="screen" id="availScreen"></div></div>
+    </div>
+    <p class="solo-note">Mockup with sample shifts. <a href="#" id="toOwner">See the owner's side</a></p>
+  </section>
+
+  <section class="view" id="v-sms">
+    <div class="two three">
+      <div class="phone"><div class="screen" id="smsScreen"></div></div>
+      <div class="explain">
+        <div class="label">What lands on their phone</div>
+        <h2>A normal text from her own number</h2>
+        <p>Every Text button opens Messages on her phone with the person's number, their shifts and their link already written. She taps Send. Staff know her number, and there is nothing to sign up for.</p>
+        <p>The link in the text opens their page. Tap it in the phone here to see it.</p>
+        <label class="viewas">Phone of <select id="smsWho"></select></label>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="overlay" id="pick" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="pickTitle">
+    <h3 id="pickTitle"></h3>
+    <p id="pickNote" class="muted"></p>
+    <div class="label muted" style="margin-bottom:8px">Shift</div>
+    <div class="chips" id="pickChips"></div>
+    <div class="give" id="pickGive"></div>
+    <div class="sheet-foot">
+      <button class="btn" id="pickRemove">Remove shift</button>
+      <button class="btn" data-close>Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="pub" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="pubTitle">
+    <h3 id="pubTitle"></h3>
+    <p id="pubNote" class="muted"></p>
+    <ul class="publist" id="pubList"></ul>
+    <div id="pubAlert"></div>
+    <div class="sheet-foot">
+      <button class="btn" data-close>Go back</button>
+      <button class="btn primary" id="pubDone">Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const DAYS=[
+  {k:'mon',d:'Mon',full:'Monday',date:'10/20',n:20,open:[11,14],pre:[[9,14],[11,14]]},
+  {k:'tue',d:'Tue',full:'Tuesday',date:'10/21',n:21,open:[11,14],pre:[[9,14],[11,14]]},
+  {k:'wed',d:'Wed',full:'Wednesday',date:'10/22',n:22,open:[11,14],pre:[[9,14],[11,14]]},
+  {k:'thu',d:'Thu',full:'Thursday',date:'10/23',n:23,open:[11,20],pre:[[9,14],[11,16],[16,20],[11,20]]},
+  {k:'fri',d:'Fri',full:'Friday',date:'10/24',n:24,open:[11,21],pre:[[11,16],[16,21],[11,21]]},
+  {k:'sat',d:'Sat',full:'Saturday',date:'10/25',n:25,open:[11,21],pre:[[11,16],[16,21],[11,21]]},
+  {k:'sun',d:'Sun',full:'Sunday',date:'10/26',n:26,open:[12,15],pre:[[11,15],[12,15]]}
+];
+const PEOPLE=[
+  {id:'you',name:'You',role:'Owner',locked:true},
+  {id:'braxton',name:'Braxton',role:'Cook',phone:'+18505550101'},
+  {id:'kayla',name:'Kayla',role:'Server',phone:'+18505550102'},
+  {id:'marcus',name:'Marcus',role:'Pizza oven',phone:'+18505550103'},
+  {id:'jess',name:'Jess',role:'Server',phone:'+18505550104'},
+  {id:'tyler',name:'Tyler',role:'Dish',phone:'+18505550105'},
+  {id:'destiny',name:'Destiny',role:'Server',phone:'+18505550106'}
+];
+const AVAIL={
+  braxton:{mon:'off',tue:'off',wed:'off',thu:'late',fri:'late',sat:'any',sun:'any'},
+  kayla:{mon:'any',tue:'any',wed:'any',thu:'any',fri:'any',sat:'any',sun:'off'},
+  marcus:{mon:'any',tue:'any',wed:'any',thu:'any',fri:'off',sat:'any',sun:'any'},
+  jess:{mon:'any',tue:'any',wed:'any',thu:'any',fri:'any',sat:'any',sun:'any'},
+  tyler:{mon:'off',tue:'off',wed:'any',thu:'any',fri:'any',sat:'any',sun:'any'},
+  destiny:{mon:'off',tue:'off',wed:'off',thu:'off',fri:'late',sat:'any',sun:'any'}
+};
+const OWNER={mon:[9,14],tue:[9,14],wed:[9,14],thu:[11,20],fri:[11,21],sat:[11,21]};
+const LAST={
+  braxton:{thu:[16,20],fri:[16,21],sat:[11,16],sun:[12,15]},
+  kayla:{mon:[11,14],tue:[11,14],thu:[11,16],fri:[16,21]},
+  marcus:{wed:[11,14],thu:[16,20],sat:[11,21],sun:[12,15]},
+  jess:{mon:[11,14],wed:[11,14],fri:[11,16],sat:[11,16]},
+  tyler:{thu:[16,20],fri:[16,21],sat:[16,21]},
+  destiny:{sat:[16,21],sun:[11,15]}
+};
+const state={
+  shifts:{you:{...OWNER}},
+  timeOff:{},
+  requests:[
+    {pid:'jess',day:'sat',reason:'Family wedding',status:'pending'},
+    {pid:'tyler',day:'fri',reason:'Doctor appointment',status:'pending'}
+  ],
+  published:null,pubTime:null,confirmed:{},msgs:{},invited:{},sent:{},pubMode:null,
+  who:'braxton',smsWho:'braxton',draft:null
+};
+PEOPLE.forEach(p=>{if(!p.locked){state.shifts[p.id]={};state.timeOff[p.id]=new Set();state.msgs[p.id]=[];}});
+
+const $=s=>document.querySelector(s);
+const person=id=>PEOPLE.find(p=>p.id===id);
+const day=k=>DAYS.find(d=>d.k===k);
+const fmt=h=>String(h>12?h-12:h);
+const rng=s=>fmt(s[0])+'-'+fmt(s[1]);
+const same=(a,b)=>(!a&&!b)||(a&&b&&a[0]===b[0]&&a[1]===b[1]);
+const clone=o=>JSON.parse(JSON.stringify(o));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const IOS=/iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const MOBILE=IOS||/Android/i.test(navigator.userAgent);
+const BASE=location.href.split('#')[0];
+const link=id=>`${BASE}#me=${id}`;
+function availFor(id,k){if(state.timeOff[id]&&state.timeOff[id].has(k))return 'dayoff';return (AVAIL[id]||{})[k]||'any';}
+function fits(av,s){if(av==='any')return true;if(av==='early')return s[1]<=16;if(av==='late')return s[0]>=16;return false;}
+function availText(av,name){return {any:'Available any time',early:'Available until 4',late:'Available after 4',off:`${name} marked this day as can't work`,dayoff:`${name} has this day off (approved request)`}[av];}
+function shiftsOf(id,src){const m=(src||state.shifts)[id]||{};return DAYS.filter(d=>m[d.k]).map(d=>({d,s:m[d.k]}));}
+function changesFor(id){
+  if(!state.published)return [];
+  const now=state.shifts[id]||{},was=state.published[id]||{},out=[];
+  DAYS.forEach(d=>{if(!same(now[d.k],was[d.k]))out.push({d,from:was[d.k],to:now[d.k]});});
+  return out;
+}
+function describe(c,toEmployee){
+  if(!c.from)return `Added ${c.d.d} ${c.d.date} ${rng(c.to)}`;
+  if(!c.to)return toEmployee?`${c.d.d} ${c.d.date} ${rng(c.from)} is off your schedule`:`Removed ${c.d.d} ${c.d.date} ${rng(c.from)}`;
+  return `${c.d.d} ${c.d.date} is now ${rng(c.to)} (was ${rng(c.from)})`;
+}
+function conflicts(){let n=0;PEOPLE.forEach(p=>{if(p.locked)return;shiftsOf(p.id).forEach(x=>{if(!fits(availFor(p.id,x.d.k),x.s))n++;});});return n;}
+function clock(){const d=new Date();let h=d.getHours(),m=String(d.getMinutes()).padStart(2,'0'),ap=h>=12?'PM':'AM';h=h%12||12;return `${h}:${m} ${ap}`;}
+let toastT;
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),3800);}
+
+/* the texts she sends from her own phone */
+function bodyFor(p,kind){
+  if(kind==='invite')return `Hi ${p.name}, it's the cafe. Tap this and mark the days you can and can't work. It saves for every week: ${link(p.id)}`;
+  if(kind==='week')return `${p.name}, your Flatwoods shifts for Oct 20-26:\n${shiftsOf(p.id).map(x=>`${x.d.d} ${x.d.date} ${rng(x.s)}`).join('\n')}\nSee it or ask for a day off: ${link(p.id)}`;
+  return `${p.name}, schedule change:\n${changesFor(p.id).map(c=>describe(c,true)).join('\n')}\nYour week: ${link(p.id)}`;
+}
+function smsHref(p,kind){return `sms:${p.phone}${IOS?'&':'?'}body=${encodeURIComponent(bodyFor(p,kind))}`;}
+function sendLink(p,kind,label,cls){return `<a class="${cls}" href="${smsHref(p,kind)}" data-send="${p.id}" data-kind="${kind}">${label}</a>`;}
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[data-send]');
+  if(!a)return;
+  const p=person(a.dataset.send),kind=a.dataset.kind;
+  if(!MOBILE){e.preventDefault();toast(`On her phone this opens Messages to ${p.name} with the text already written. She taps Send.`);}
+  state.msgs[p.id].push({t:clock(),text:bodyFor(p,kind)});
+  if(kind==='invite'){state.invited[p.id]=true;renderGrid();}
+  else{
+    state.sent[p.id]=true;a.textContent='Sent';a.classList.add('done');a.classList.remove('pine');
+    if(p.id!=='tyler')setTimeout(()=>{state.confirmed[p.id]=true;renderGrid();renderAvail();},2600);
+  }
+  renderSms();
+});
+
+function renderGrid(){
+  let h='<thead><tr><th class="who"><span class="label muted">Staff</span></th>';
+  DAYS.forEach(d=>{h+=`<th><span class="dn">${d.d}</span> <span class="dd">${d.n}</span><small>Open ${rng(d.open)}</small></th>`;});
+  h+='<th class="hrs label">Hours</th></tr></thead><tbody>';
+  PEOPLE.forEach(p=>{
+    let extra='';
+    if(!p.locked){
+      if(state.published&&shiftsOf(p.id,state.published).length)extra+=state.confirmed[p.id]?'<span class="cf yes">Got it</span>':'<span class="cf no">Not seen yet</span>';
+      extra+=sendLink(p,'invite',state.invited[p.id]?'Link sent':'Text link',state.invited[p.id]?'mini sent':'mini');
+    }
+    h+=`<tr><th class="who"><b>${p.name}</b><small>${p.locked?'Owner, set schedule':p.role}</small>${extra}</th>`;
+    let tot=0;
+    DAYS.forEach(d=>{
+      const s=(state.shifts[p.id]||{})[d.k];
+      const av=p.locked?'any':availFor(p.id,d.k);
+      const chg=state.published&&!p.locked&&!same(s,(state.published[p.id]||{})[d.k])?' changed':'';
+      const at=`data-p="${p.id}" data-d="${d.k}"`;
+      if(s){
+        tot+=s[1]-s[0];
+        const bad=!p.locked&&!fits(av,s);
+        h+=`<td><button class="cell shift${p.locked?' lock':''}${bad?' conflict':''}${chg}" ${at} aria-label="${p.name} ${d.full} ${rng(s)}">${rng(s)}${bad?`<small>${av==='dayoff'?'Has day off':"Can't work"}</small>`:''}</button></td>`;
+      }else if(av==='off'||av==='dayoff'){
+        h+=`<td><button class="cell off${chg}" ${at} aria-label="${p.name} ${d.full} unavailable">${av==='dayoff'?'Day off':"Can't work"}</button></td>`;
+      }else if(p.locked){
+        h+=`<td><button class="cell off" ${at} aria-label="You are off ${d.full}">Off</button></td>`;
+      }else{
+        h+=`<td><button class="cell add${chg}" ${at} aria-label="Add shift for ${p.name} ${d.full}">+${av==='early'?'<small>until 4</small>':av==='late'?'<small>after 4</small>':''}</button></td>`;
+      }
+    });
+    h+=`<td class="hrs">${tot}</td></tr>`;
+  });
+  h+='</tbody><tfoot><tr><th class="who">On shift</th>';
+  DAYS.forEach(d=>{h+=`<td>${PEOPLE.filter(p=>(state.shifts[p.id]||{})[d.k]).length}</td>`;});
+  h+='<td></td></tr></tfoot>';
+  $('#grid').innerHTML=h;
+}
+
+function renderReqs(){
+  const pend=state.requests.filter(r=>r.status==='pending').length;
+  $('#reqCount').textContent=pend||'';
+  $('#reqBadge').textContent=pend||'';
+  if(!state.requests.length){$('#reqList').innerHTML='<p class="empty">No requests.</p>';return;}
+  $('#reqList').innerHTML=state.requests.map((r,i)=>{
+    const p=person(r.pid),d=day(r.day),s=(state.shifts[r.pid]||{})[r.day];
+    let foot;
+    if(r.status==='pending')foot=`<div class="req-act"><button class="btn sm pine" data-ok="${i}">Approve</button><button class="btn sm" data-no="${i}">Deny</button></div>`;
+    else if(r.status==='ok')foot=`<div class="done ok">Approved. It shows on ${p.name}'s page</div>${s?`<div class="warn">${p.name} still has ${d.d} ${rng(s)}. Tap that shift to give it to someone else.</div>`:''}`;
+    else foot=`<div class="done no">Denied. It shows on ${p.name}'s page</div>`;
+    return `<div class="req"><div><b>${p.name}</b> wants <b>${d.d} ${d.date}</b> off<small>"${esc(r.reason)}"</small></div>${foot}</div>`;
+  }).join('');
+}
+
+function renderPub(){
+  const b=$('#pubBtn'),st=$('#status');
+  if(!state.published){b.textContent='Publish';b.disabled=false;st.textContent='Draft';st.className='chip';return;}
+  const n=PEOPLE.filter(p=>!p.locked&&changesFor(p.id).length).length;
+  st.textContent=`Published ${state.pubTime}`;st.className='chip pub';
+  if(n){b.textContent=`Send changes (${n})`;b.disabled=false;}else{b.textContent='Published';b.disabled=true;}
+}
+
+function renderAll(){renderGrid();renderReqs();renderPub();renderAvail();renderSms();}
+
+/* shift picker */
+let pickCtx=null;
+function openPicker(pid,dk){
+  const p=person(pid),d=day(dk);
+  if(p.locked){toast('Your set schedule stays the same every week.');return;}
+  const s=(state.shifts[pid]||{})[dk],av=availFor(pid,dk);
+  if(!s&&(av==='off'||av==='dayoff')){toast(av==='dayoff'?`${p.name} has ${d.full} off. You approved it.`:`${p.name} marked ${d.full}s as can't work.`);return;}
+  pickCtx={pid,dk};
+  $('#pickTitle').textContent=`${p.name}, ${d.full} ${d.date}`;
+  $('#pickNote').textContent=availText(av,p.name)+'.';
+  $('#pickChips').innerHTML=d.pre.map((x,i)=>`<button class="pchip${same(x,s)?' sel':''}" data-i="${i}" ${fits(av,x)?'':'disabled'}>${rng(x)}</button>`).join('');
+  $('#pickRemove').hidden=!s;
+  if(s){
+    const free=PEOPLE.filter(o=>!o.locked&&o.id!==pid&&!(state.shifts[o.id]||{})[dk]&&fits(availFor(o.id,dk),s));
+    $('#pickGive').innerHTML=`<div class="label muted" style="margin-bottom:8px">Give ${rng(s)} to someone free</div>`+(free.length?`<div class="chips">${free.map(o=>`<button data-give="${o.id}">${o.name}</button>`).join('')}</div>`:'<p class="muted" style="margin:0;font-size:14px">Nobody else is free for this shift.</p>');
+    $('#pickGive').hidden=false;
+  }else{$('#pickGive').hidden=true;}
+  $('#pick').hidden=false;
+}
+function closeAll(){$('#pick').hidden=true;$('#pub').hidden=true;pickCtx=null;}
+$('#pickChips').addEventListener('click',e=>{const b=e.target.closest('.pchip');if(!b||b.disabled)return;const {pid,dk}=pickCtx;state.shifts[pid][dk]=day(dk).pre[+b.dataset.i];closeAll();renderAll();});
+$('#pickGive').addEventListener('click',e=>{const b=e.target.closest('[data-give]');if(!b)return;const {pid,dk}=pickCtx,s=state.shifts[pid][dk];delete state.shifts[pid][dk];state.shifts[b.dataset.give][dk]=s;closeAll();renderAll();toast(`${day(dk).d} ${rng(s)} moved from ${person(pid).name} to ${person(b.dataset.give).name}.`);});
+$('#pickRemove').addEventListener('click',()=>{const {pid,dk}=pickCtx;delete state.shifts[pid][dk];closeAll();renderAll();});
+document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',closeAll));
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeAll();}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAll();});
+$('#grid').addEventListener('click',e=>{const b=e.target.closest('.cell');if(b)openPicker(b.dataset.p,b.dataset.d);});
+
+/* copy last week */
+function copyLast(){let n=0;Object.entries(LAST).forEach(([id,m])=>Object.entries(m).forEach(([k,s])=>{if(!state.shifts[id][k]){state.shifts[id][k]=s.slice();n++;}}));return n;}
+$('#copyBtn').addEventListener('click',()=>{
+  const n=copyLast();
+  renderAll();
+  const c=conflicts();
+  $('#hint').innerHTML='Tap any shift to change it or hand it to someone who is free. Approve or deny day-off requests, then <b>Publish</b>.';
+  toast(n?`Copied ${n} shifts from last week.${c?` ${c} clash with days off.`:''}`:'Last week is already copied in.');
+});
+
+/* requests */
+$('#reqList').addEventListener('click',e=>{
+  const ok=e.target.closest('[data-ok]'),no=e.target.closest('[data-no]');
+  if(!ok&&!no)return;
+  const r=state.requests[+(ok?ok.dataset.ok:no.dataset.no)];
+  r.status=ok?'ok':'no';
+  if(ok)state.timeOff[r.pid].add(r.day);
+  renderAll();
+});
+
+/* publish: one Text button per person, each opens Messages on her phone */
+$('#pubBtn').addEventListener('click',()=>{
+  const c=conflicts();
+  state.sent={};
+  let rec;
+  if(!state.published){
+    rec=PEOPLE.filter(p=>!p.locked&&shiftsOf(p.id).length);
+    if(!rec.length){toast('No shifts yet. Start with Copy last week.');return;}
+    state.pubMode='week';
+    $('#pubTitle').textContent='Text everyone their week';
+    $('#pubNote').textContent='Each button opens Messages on your phone with that person’s shifts and link already written. Tap Send, come back, tap the next one.';
+    $('#pubList').innerHTML=rec.map(p=>`<li><div><b>${p.name}</b><span>${shiftsOf(p.id).map(x=>`${x.d.d} ${rng(x.s)}`).join(', ')}</span></div>${sendLink(p,'week','Text '+p.name,'btn sm pine')}</li>`).join('');
+  }else{
+    rec=PEOPLE.filter(p=>!p.locked&&changesFor(p.id).length);
+    state.pubMode='change';
+    $('#pubTitle').textContent='Text the changes';
+    $('#pubNote').textContent=`Only ${rec.length===1?'this person needs':`these ${rec.length} need`} a text. Nobody else's shifts changed.`;
+    $('#pubList').innerHTML=rec.map(p=>`<li><div><b>${p.name}</b><span>${changesFor(p.id).map(c=>describe(c)).join('; ')}</span></div>${sendLink(p,'change','Text '+p.name,'btn sm pine')}</li>`).join('');
+  }
+  $('#pubAlert').innerHTML=c?`<p class="alert">${c} ${c===1?'shift clashes':'shifts clash'} with a day off or a can't-work day. Go back and tap the orange ${c===1?'shift':'shifts'} to fix it first.</p>`:'';
+  $('#pub').hidden=false;
+});
+$('#pubDone').addEventListener('click',()=>{
+  const first=!state.published;
+  state.published=clone(state.shifts);state.pubTime=clock();
+  closeAll();renderAll();
+  toast(first?'Week published. Everyone sees it on their page.':'Changes published.');
+});
+
+/* employee page */
+const who=$('#who'),smsWho=$('#smsWho');
+PEOPLE.filter(p=>!p.locked).forEach(p=>{who.add(new Option(p.name,p.id));smsWho.add(new Option(p.name,p.id));});
+who.addEventListener('change',()=>{state.who=who.value;state.draft=null;renderAvail();});
+smsWho.addEventListener('change',()=>{state.smsWho=smsWho.value;renderSms();});
+function renderAvail(){
+  const id=state.who,p=person(id);
+  who.value=id;
+  if(!state.draft||state.draft.id!==id)state.draft={id,a:{...AVAIL[id]}};
+  const a=state.draft.a;
+  const rows=DAYS.map(d=>{
+    const late=d.open[1]>16;
+    const opts=late?[['any','Any time'],['early','Until 4'],['late','After 4'],['off',"Can't"]]:[['any','Can work'],['off',"Can't"]];
+    const v=!late&&(a[d.k]==='early'||a[d.k]==='late')?'any':a[d.k];
+    return `<div class="dayrow"><div class="dl"><b>${d.full}</b><small>Open ${rng(d.open)}</small></div><div class="seg">${opts.map(o=>`<button data-day="${d.k}" data-val="${o[0]}" class="${v===o[0]?'sel'+(o[0]==='off'?' offsel':''):''}">${o[1]}</button>`).join('')}</div></div>`;
+  }).join('');
+  const pub=state.published?shiftsOf(id,state.published):null;
+  let week;
+  if(!pub)week='<p class="sm">Not posted yet. You get a text when it is.</p>';
+  else if(!pub.length)week='<p class="sm">No shifts this week.</p>';
+  else week=`<ul class="myshifts">${pub.map(x=>`<li>${x.d.full} ${x.d.date}<b>${rng(x.s)}</b></li>`).join('')}</ul>`+(state.confirmed[id]?'<div class="okline">Got it. The owner can see you saw it.</div>':'<button class="btn pine block" id="gotIt">Got it</button>');
+  const mine=state.requests.filter(r=>r.pid===id);
+  const reqs=mine.length?mine.map(r=>`<div class="myreq"><span>${day(r.day).full} ${day(r.day).date} off</span><b>${{pending:'Waiting on the owner',ok:'Approved',no:'Not approved'}[r.status]}</b></div>`).join(''):'';
+  $('#availScreen').innerHTML=`
+    <div class="app-h"><div class="label">Flatwoods Cafe</div><h3>Hi ${p.name}</h3></div>
+    <div class="app-b">
+      <div class="card2"><h4>Your shifts, Oct 20 to 26</h4>${week}</div>
+      <div class="card2">
+        <h4>Need a day off?</h4>
+        <label for="offDay">Day</label>
+        <select id="offDay">${DAYS.map(d=>`<option value="${d.k}">${d.full} ${d.date}</option>`).join('')}</select>
+        <label for="offWhy">Reason (optional)</label>
+        <input id="offWhy" placeholder="Doctor, family, school">
+        <button class="btn block" id="sendOff" style="margin-top:12px">Send request</button>
+        ${reqs?`<div style="margin-top:12px">${reqs}</div>`:''}
+      </div>
+      <div class="card2">
+        <h4>When can you work?</h4>
+        <p class="sm">This repeats every week. Change it anytime.</p>
+        ${rows}
+        <button class="btn pine block" id="saveAvail" style="margin-top:14px">Save</button>
+      </div>
+    </div>`;
+}
+$('#availScreen').addEventListener('click',e=>{
+  const seg=e.target.closest('.seg button');
+  if(seg){state.draft.a[seg.dataset.day]=seg.dataset.val;renderAvail();return;}
+  if(e.target.id==='saveAvail'){AVAIL[state.who]={...state.draft.a};renderAll();toast(`Saved. It shows on the owner's schedule right away.`);return;}
+  if(e.target.id==='gotIt'){state.confirmed[state.who]=true;renderAll();return;}
+  if(e.target.id==='sendOff'){
+    const k=$('#offDay').value,why=$('#offWhy').value.trim()||'No reason given';
+    if(state.requests.some(r=>r.pid===state.who&&r.day===k&&r.status==='pending')){toast('That request is already waiting on the owner.');return;}
+    state.requests.push({pid:state.who,day:k,reason:why,status:'pending'});
+    renderAll();toast('Sent. It shows up on the owner’s schedule.');
+  }
+});
+
+/* the text on the employee's phone */
+function renderSms(){
+  const id=state.smsWho,p=person(id),url=esc(link(id));
+  let last='',th='';
+  state.msgs[id].forEach(m=>{
+    if(m.t!==last){th+=`<div class="ts">Today ${m.t}</div>`;last=m.t;}
+    th+=`<div class="bub">${esc(m.text).split(url).join(`<a href="#me=${id}" data-me="${id}">${url}</a>`)}</div>`;
+  });
+  if(!state.msgs[id].length)th+=`<p class="note">Nothing yet. On the owner tab, tap Text link under ${p.name}, or Publish the week.</p>`;
+  const sc=$('#smsScreen');
+  sc.innerHTML=`<div class="sms-h"><div class="av">F</div><b>Flatwoods (owner)</b><small>Her own cell number</small></div><div class="thread">${th}</div>`;
+  sc.scrollTop=sc.scrollHeight;
+}
+$('#smsScreen').addEventListener('click',e=>{
+  const a=e.target.closest('[data-me]');if(!a)return;
+  e.preventDefault();state.who=a.dataset.me;state.draft=null;showTab('avail');renderAvail();
+});
+
+/* tabs and the employee-only link */
+function showTab(v){
+  document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x.dataset.v===v));
+  document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.v)));
+function route(){
+  const m=location.hash.match(/^#me=(\w+)/);
+  const p=m&&person(m[1]);
+  if(p&&!p.locked){
+    if(!state.published){copyLast();state.published=clone(state.shifts);state.pubTime='Sun 6:12 PM';}
+    state.who=p.id;state.draft=null;
+    document.body.classList.add('solo');showTab('avail');
+  }else{document.body.classList.remove('solo');}
+  renderAll();
+}
+$('#toOwner').addEventListener('click',e=>{e.preventDefault();history.replaceState(null,'',BASE);document.body.classList.remove('solo');showTab('week');renderAll();});
+window.addEventListener('hashchange',route);
+route();
+</script>
+</body>
+</html>
